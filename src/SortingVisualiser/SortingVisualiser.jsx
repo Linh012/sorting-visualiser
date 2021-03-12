@@ -1,6 +1,6 @@
 import React from 'react';
 import './SortingVisualiser.css';
-import {bubbleSortAnimation, quickSortAnimation} from '../sortingAlgorithms/sortingAlgorithms.js';
+import {bubbleSortAnimation, quickSortAnimation, getMergeSortAnimations} from '../sortingAlgorithms/sortingAlgorithms.js';
 
 const ARR_LENGTH = 120;
 
@@ -41,7 +41,27 @@ export default class SortingVisualiser extends React.Component {
   }
 
   mergeSort(){
-
+    const animations = getMergeSortAnimations(this.state.array);
+        for (let i = 0; i < animations.length; i++) {
+          const arrayBars = document.getElementsByClassName('array-bar');
+          const isColorChange = i % 3 !== 2;
+          if (isColorChange) {
+            const [barOneIdx, barTwoIdx] = animations[i];
+            const barOneStyle = arrayBars[barOneIdx].style;
+            const barTwoStyle = arrayBars[barTwoIdx].style;
+            const color = i % 3 === 0 ? 'blue' : 'blue'; //color change disabled
+            setTimeout(() => {
+              barOneStyle.backgroundColor = color;
+              barTwoStyle.backgroundColor = color;
+            }, i * 5);
+          } else {
+            setTimeout(() => {
+              const [barOneIdx, newHeight] = animations[i];
+              const barOneStyle = arrayBars[barOneIdx].style;
+              barOneStyle.height = `${newHeight}px`;
+            }, i * 5);
+          }
+        }
   }
 
   heapSort(){
@@ -65,14 +85,13 @@ export default class SortingVisualiser extends React.Component {
         </div>
 
       ))}
-      <div className='button-container'>
-        <button onClick={() => this.resetArray()}>New Array</button>
-        <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
-        <button onClick={() => this.quickSort()}>Quick Sort</button>
-        <button onClick={() => this.mergeSort()}>Merge Sort</button>
-        <button onClick={() => this.heapSort()}>Heap Sort</button>
-
-      </div>
+        <div className='button-container'>
+          <button onClick={() => this.resetArray()}>New Array</button>
+          <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
+          <button onClick={() => this.quickSort()}>Quick Sort</button>
+          <button onClick={() => this.mergeSort()}>Merge Sort</button>
+          <button onClick={() => this.heapSort()}>Heap Sort</button>
+        </div>
 
       </div>
     );
