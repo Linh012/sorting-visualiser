@@ -4,7 +4,7 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <div class="header">
+      <div className="header">
         <p>Sorting Visualiser</p>
       </div>
 
