@@ -1,6 +1,6 @@
 import React from 'react';
 import './SortingVisualiser.css';
-import {bubbleSortAnimation, quickSortAnimation, getMergeSortAnimations} from '../sortingAlgorithms/sortingAlgorithms.js';
+import {bubbleSortAnimation, quickSortAnimation, getMergeSortAnimations, heapSortAnimation} from '../sortingAlgorithms/sortingAlgorithms.js';
 
 const ARR_LENGTH = 120;
 
@@ -65,7 +65,8 @@ export default class SortingVisualiser extends React.Component {
   }
 
   heapSort(){
-
+    const animations = heapSortAnimation(this.state.array);
+    animate(animations, 15);
   }
 
 
