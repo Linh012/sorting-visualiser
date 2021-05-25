@@ -13,7 +13,7 @@ export function bubbleSortAnimation(array) {
 };
 
 function swap(arr, leftIndex, rightIndex){
-    var temp = arr[leftIndex];
+    const temp = arr[leftIndex];
     arr[leftIndex] = arr[rightIndex];
     arr[rightIndex] = temp;
 }
@@ -31,7 +31,10 @@ function partition(arr, left, right, animations) {
         }
         if (i <= j) {
             swap(arr, i, j);
-            animations.push([i,j]);
+            if (i !== j)
+            {
+              animations.push([i,j]);
+            }
             i++;
             j--;
         }
@@ -55,8 +58,7 @@ function quickSort(arr, left, right, animations) {
 
 
 export function quickSortAnimation(array) {
-  const animations = [];
-  return quickSort(array, 0, array.length-1, animations);
+  return quickSort(array, 0, array.length-1, []);
 }
 
 var array_length;
