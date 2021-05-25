@@ -48,17 +48,18 @@ export default class SortingVisualiser extends React.Component {
 
   mergeSort(){
     const animations = getMergeSortAnimations(this.state.array);
-    disable_buttons(animations.length, 5);
-
-        for (let i = 0; i < animations.length; i++) {
-          const arrayBars = document.getElementsByClassName('array-bar');
-          setTimeout(() => {
-            const [barOneIdx, newHeight] = animations[i];
-            const barStyle = arrayBars[barOneIdx].style;
-            barStyle.height = `${newHeight}px`;
-          }, i * 5);
-        }
+    disable_buttons(animations.length, 3);
+    for (let i = 0; i < animations.length; i++) {
+      const arrayBars = document.getElementsByClassName('array-bar');
+      if (i % 3 === 2) {
+      setTimeout(() => {
+        const [barOneIdx, newHeight] = animations[i];
+        const barStyle = arrayBars[barOneIdx].style;
+        barStyle.height = `${newHeight}px`;
+      }, i * 3);
+    }
   }
+}
 
   heapSort(){
     const animations = heapSortAnimation(this.state.array);
@@ -94,10 +95,9 @@ export default class SortingVisualiser extends React.Component {
       </div>
     );
   }
-
-
 }
 
+//Visualise sorting
 function animate(animations, speed){
     for(let i=0; i<animations.length; i++){
 
@@ -114,22 +114,30 @@ function animate(animations, speed){
     }
   }
 
+//Change bar colors to indicate completion of sorting
 function complete(){
     for(let i=0; i<ARR_LENGTH+1; i++){
-
       const arrayBars = document.getElementsByClassName('array-bar');
-      arrayBars[i].style.backgroundColor = '#1abc9c';
-
       setTimeout(() => {
-        arrayBars[i].style.backgroundColor = '#3888ff';
+        arrayBars[i].style.backgroundColor = '#1abc9c';
       }, i * 7)
     }
+
+    //Revert bar color to blue
+    setTimeout(() => {
+        for(let i=0; i<ARR_LENGTH+1; i++){
+          const arrayBars = document.getElementsByClassName('array-bar');
+          arrayBars[i].style.backgroundColor = '#3888ff';
+        }
+    }, 2000)
   }
 
+//Get random integer
 function randomIntFromInterval(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+//Make button unclickable when sorting
 function disable_buttons(len, speed)
 {
   var x = document.getElementsByClassName("controls");
