@@ -19,14 +19,9 @@ export default class SortingVisualiser extends React.Component {
 
   resetArray(){
     const array = [];
-    const r = randomIntFromInterval(1, ARR_LENGTH);
 
     for (let i=0; i<ARR_LENGTH; i++){
       array.push(randomIntFromInterval(10,500));
-
-      if (i === r){
-        array.push(500);
-      }
 
     }
     this.setState({array});
@@ -48,16 +43,15 @@ export default class SortingVisualiser extends React.Component {
 
   mergeSort(){
     const animations = getMergeSortAnimations(this.state.array);
-    disable_buttons(animations.length, 3);
+    disable_buttons(animations.length, 7);
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName('array-bar');
-      if (i % 3 === 2) {
+
       setTimeout(() => {
         const [barOneIdx, newHeight] = animations[i];
         const barStyle = arrayBars[barOneIdx].style;
         barStyle.height = `${newHeight}px`;
-      }, i * 3);
-    }
+      }, i * 7);
   }
 }
 
@@ -100,23 +94,20 @@ export default class SortingVisualiser extends React.Component {
 //Visualise sorting
 function animate(animations, speed){
     for(let i=0; i<animations.length; i++){
-
       const arrayBars = document.getElementsByClassName('array-bar');
-      const [first, second] = animations[i];
-      const firstBarStyle = arrayBars[first].style;
-      const secondBarStyle = arrayBars[second].style;
 
       setTimeout(() => {
-        const temp = firstBarStyle.height;
-        firstBarStyle.height = secondBarStyle.height;
-        secondBarStyle.height = temp;
+        const [barOneIdx, barTwoIdx] = animations[i];
+        const temp = arrayBars[barOneIdx].style.height;
+        arrayBars[barOneIdx].style.height = arrayBars[barTwoIdx].style.height;
+        arrayBars[barTwoIdx].style.height = temp;
       }, i * speed)
     }
   }
 
 //Change bar colors to indicate completion of sorting
 function complete(){
-    for(let i=0; i<ARR_LENGTH+1; i++){
+    for(let i=0; i<ARR_LENGTH; i++){
       const arrayBars = document.getElementsByClassName('array-bar');
       setTimeout(() => {
         arrayBars[i].style.backgroundColor = '#1abc9c';
@@ -125,7 +116,7 @@ function complete(){
 
     //Revert bar color to blue
     setTimeout(() => {
-        for(let i=0; i<ARR_LENGTH+1; i++){
+        for(let i=0; i<ARR_LENGTH; i++){
           const arrayBars = document.getElementsByClassName('array-bar');
           arrayBars[i].style.backgroundColor = '#3888ff';
         }
@@ -157,7 +148,10 @@ function disable_buttons(len, speed)
     {
       x[i].disabled = false;
       x[i].className = "controls";
-      complete();
+      if (x.length === 1)
+      {
+        complete();
+      }
     }
   }, len * speed)
 }
