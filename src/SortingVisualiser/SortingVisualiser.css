@@ -5,17 +5,15 @@
 }
 
 .array-container {
-  left: 100px;
-  position: absolute;
+  position: static;
 }
 
 .button-container{
-  position:fixed;
-  bottom: 30px;
+  position: static;
 }
 
-button{
-  background-color: #1abc9c; /* #4CAF50 */
+.controls{
+  background-color: #1abc9c;
   border: none;
   color: white;
   padding: 15px 32px;
@@ -24,5 +22,16 @@ button{
   display: inline-block;
   font-size: 16px;
   margin: 0 2px;
+}
 
+.controls-disabled{
+  background-color: #B0CEC9;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 0 2px;
 }
