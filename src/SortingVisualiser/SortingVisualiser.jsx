@@ -4,9 +4,6 @@ import {bubbleSortAnimation, quickSortAnimation, getMergeSortAnimations, heapSor
 
 const ARR_LENGTH = 120;
 
-const MAIN_COLOR = 'blue';
-
-
 export default class SortingVisualiser extends React.Component {
   constructor(props){
     super(props);
@@ -22,12 +19,12 @@ export default class SortingVisualiser extends React.Component {
 
   resetArray(){
     const array = [];
-    var r = randomIntFromInterval(1, ARR_LENGTH);
+    const r = randomIntFromInterval(1, ARR_LENGTH);
 
     for (let i=0; i<ARR_LENGTH; i++){
       array.push(randomIntFromInterval(10,500));
 
-      if (i == r){
+      if (i === r){
         array.push(500);
       }
 
@@ -39,14 +36,14 @@ export default class SortingVisualiser extends React.Component {
 
   bubbleSort(){
     const animations = bubbleSortAnimation(this.state.array);
-    disable_buttons(animations.length, 1);
     animate(animations, 1);
+    disable_buttons(animations.length, 1);
   }
 
   quickSort(){
     const animations = quickSortAnimation(this.state.array)[1];
-    disable_buttons(animations.length, 50);
-    animate(animations, 50);
+    animate(animations, 35);
+    disable_buttons(animations.length, 35);
   }
 
   mergeSort(){
@@ -55,30 +52,18 @@ export default class SortingVisualiser extends React.Component {
 
         for (let i = 0; i < animations.length; i++) {
           const arrayBars = document.getElementsByClassName('array-bar');
-          const isColorChange = i % 3 !== 2;
-          if (isColorChange) {
-            const [barOneIdx, barTwoIdx] = animations[i];
-            const barOneStyle = arrayBars[barOneIdx].style;
-            const barTwoStyle = arrayBars[barTwoIdx].style;
-            const color = i % 3 === 0 ? 'blue' : 'blue'; //color change disabled
-            setTimeout(() => {
-              barOneStyle.backgroundColor = color;
-              barTwoStyle.backgroundColor = color;
-            }, i * 5);
-          } else {
-            setTimeout(() => {
-              const [barOneIdx, newHeight] = animations[i];
-              const barOneStyle = arrayBars[barOneIdx].style;
-              barOneStyle.height = `${newHeight}px`;
-            }, i * 5);
-          }
+          setTimeout(() => {
+            const [barOneIdx, newHeight] = animations[i];
+            const barStyle = arrayBars[barOneIdx].style;
+            barStyle.height = `${newHeight}px`;
+          }, i * 5);
         }
   }
 
   heapSort(){
     const animations = heapSortAnimation(this.state.array);
-    disable_buttons(animations.length, 15);
-    animate(animations, 15);
+    animate(animations, 10);
+    disable_buttons(animations.length, 10);
   }
 
 
@@ -93,7 +78,7 @@ export default class SortingVisualiser extends React.Component {
           key={idx}
           style={{
             height: `${value}px`,
-            backgroundColor: MAIN_COLOR
+            backgroundColor: '#3888ff'
           }}>
         </div>
 
@@ -127,9 +112,18 @@ function animate(animations, speed){
         secondBarStyle.height = temp;
       }, i * speed)
     }
+  }
 
+function complete(){
+    for(let i=0; i<ARR_LENGTH+1; i++){
 
+      const arrayBars = document.getElementsByClassName('array-bar');
+      arrayBars[i].style.backgroundColor = '#1abc9c';
 
+      setTimeout(() => {
+        arrayBars[i].style.backgroundColor = '#3888ff';
+      }, i * 7)
+    }
   }
 
 function randomIntFromInterval(min, max) {
@@ -141,16 +135,21 @@ function disable_buttons(len, speed)
   var x = document.getElementsByClassName("controls");
 
   //Disable buttons
-  for(let i=0; i<x.length; i++)
+  for(let i=0; i<x.length;)
   {
     x[i].disabled = true;
+    x[i].className = "controls-disabled";
   }
+
+  x = document.getElementsByClassName("controls-disabled");
 
   //Enable buttons once sorting is complete
   setTimeout(() => {
-    for(let i=0; i<x.length; i++)
+    for(let i=0; i<x.length;)
     {
       x[i].disabled = false;
+      x[i].className = "controls";
+      complete();
     }
   }, len * speed)
 }
