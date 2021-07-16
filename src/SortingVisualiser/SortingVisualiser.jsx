@@ -31,34 +31,34 @@ export default class SortingVisualiser extends React.Component {
 
   bubbleSort(){
     const animations = bubbleSortAnimation(this.state.array);
+    disable_buttons();
     animate(animations, 1);
-    disable_buttons(animations.length, 1);
   }
 
   quickSort(){
     const animations = quickSortAnimation(this.state.array)[1];
+    disable_buttons();
     animate(animations, 35);
-    disable_buttons(animations.length, 35);
   }
 
-  mergeSort(){
+  async mergeSort(){
     const animations = getMergeSortAnimations(this.state.array);
     disable_buttons(animations.length, 7);
+    //Sets heights rather than swapping heights so animate function not used
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName('array-bar');
-
-      setTimeout(() => {
-        const [barOneIdx, newHeight] = animations[i];
-        const barStyle = arrayBars[barOneIdx].style;
-        barStyle.height = `${newHeight}px`;
-      }, i * 7);
-  }
+      const [barOneIdx, newHeight] = animations[i];
+      const barStyle = arrayBars[barOneIdx].style;
+      barStyle.height = `${newHeight}px`;
+      await new Promise(r => setTimeout(r, 1));
+    }
+    enable_buttons();
 }
 
   heapSort(){
     const animations = heapSortAnimation(this.state.array);
-    animate(animations, 10);
-    disable_buttons(animations.length, 10);
+    disable_buttons();
+    animate(animations, 8);
   }
 
 
@@ -80,10 +80,10 @@ export default class SortingVisualiser extends React.Component {
       ))}
         <div className='button-container'>
           <button class="controls" onClick={() => this.resetArray()}>New Array</button>
-          <button class="controls" onClick={() => this.bubbleSort()}>Bubble Sort</button>
           <button class="controls" onClick={() => this.quickSort()}>Quick Sort</button>
           <button class="controls" onClick={() => this.mergeSort()}>Merge Sort</button>
           <button class="controls" onClick={() => this.heapSort()}>Heap Sort</button>
+          <button class="controls" onClick={() => this.bubbleSort()}>Bubble Sort</button>
         </div>
 
       </div>
@@ -91,36 +91,19 @@ export default class SortingVisualiser extends React.Component {
   }
 }
 
+
+
 //Visualise sorting
-function animate(animations, speed){
+async function animate(animations, speed){
     for(let i=0; i<animations.length; i++){
       const arrayBars = document.getElementsByClassName('array-bar');
-
-      setTimeout(() => {
-        const [barOneIdx, barTwoIdx] = animations[i];
-        const temp = arrayBars[barOneIdx].style.height;
-        arrayBars[barOneIdx].style.height = arrayBars[barTwoIdx].style.height;
-        arrayBars[barTwoIdx].style.height = temp;
-      }, i * speed)
+      const [barOneIdx, barTwoIdx] = animations[i];
+      const temp = arrayBars[barOneIdx].style.height;
+      arrayBars[barOneIdx].style.height = arrayBars[barTwoIdx].style.height;
+      arrayBars[barTwoIdx].style.height = temp;
+      await new Promise(r => setTimeout(r, speed));
     }
-  }
-
-//Change bar colors to indicate completion of sorting
-function complete(){
-    for(let i=0; i<ARR_LENGTH; i++){
-      const arrayBars = document.getElementsByClassName('array-bar');
-      setTimeout(() => {
-        arrayBars[i].style.backgroundColor = '#1abc9c';
-      }, i * 7)
-    }
-
-    //Revert bar color to blue
-    setTimeout(() => {
-        for(let i=0; i<ARR_LENGTH; i++){
-          const arrayBars = document.getElementsByClassName('array-bar');
-          arrayBars[i].style.backgroundColor = '#3888ff';
-        }
-    }, 2000)
+    enable_buttons();
   }
 
 //Get random integer
@@ -129,7 +112,7 @@ function randomIntFromInterval(min, max) {
 }
 
 //Make button unclickable when sorting
-function disable_buttons(len, speed)
+function disable_buttons()
 {
   var x = document.getElementsByClassName("controls");
 
@@ -139,19 +122,17 @@ function disable_buttons(len, speed)
     x[i].disabled = true;
     x[i].className = "controls-disabled";
   }
+}
 
-  x = document.getElementsByClassName("controls-disabled");
+//Renable button functionality
+function enable_buttons()
+{
+  var x = document.getElementsByClassName("controls-disabled");
 
   //Enable buttons once sorting is complete
-  setTimeout(() => {
-    for(let i=0; i<x.length;)
-    {
-      x[i].disabled = false;
-      x[i].className = "controls";
-      if (x.length === 1)
-      {
-        complete();
-      }
-    }
-  }, len * speed)
+  for(let i=0; i<x.length;)
+  {
+    x[i].disabled = false;
+    x[i].className = "controls";
+  }
 }
