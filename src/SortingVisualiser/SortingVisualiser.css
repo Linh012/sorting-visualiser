@@ -1,7 +1,27 @@
 .array-bar {
-  width: 3px;
+  width: 10px;
   display: inline-block;
   margin: 0 1px;
+
+}
+
+.array-bar:hover .hovertext {
+  opacity: 0.8;
+  visibility: visible;
+}
+
+.hovertext {
+  visibility: hidden;
+  width: 30px;
+  margin-left: -15px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
 }
 
 .array-container {
@@ -22,6 +42,10 @@
   display: inline-block;
   font-size: 16px;
   margin: 0 2px;
+}
+
+.controls:hover {
+  opacity: 0.8;
 }
 
 .controls-disabled{
