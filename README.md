@@ -1,3 +1,7 @@
+# sorting-visualiser
+Demonstration of various sorting algorithms. Hosted using GitHub Pages [here](https://linh012.github.io/sorting-visualiser/). 
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
