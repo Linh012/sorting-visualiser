@@ -2,7 +2,7 @@ import React from 'react';
 import './SortingVisualiser.css';
 import {bubbleSortAnimation, quickSortAnimation, getMergeSortAnimations, heapSortAnimation} from '../sortingAlgorithms/sortingAlgorithms.js';
 
-const ARR_LENGTH = 60;
+const ARR_LENGTH = 30;
 
 export default class SortingVisualiser extends React.Component {
   constructor(props){
@@ -21,7 +21,7 @@ export default class SortingVisualiser extends React.Component {
     const array = [];
 
     for (let i=0; i<ARR_LENGTH; i++){
-      array.push(randomIntFromInterval(10,500));
+      array.push(randomIntFromInterval(100,500));
 
     }
     this.setState({array});
@@ -32,18 +32,18 @@ export default class SortingVisualiser extends React.Component {
   bubbleSort(){
     const animations = bubbleSortAnimation(this.state.array);
     disable_buttons();
-    animate(animations, 10);
+    animate(animations, 30);
   }
 
   quickSort(){
     const animations = quickSortAnimation(this.state.array)[1];
     disable_buttons();
-    animate(animations, 60);
+    animate(animations, 120);
   }
 
   async mergeSort(){
     const animations = getMergeSortAnimations(this.state.array);
-    disable_buttons(animations.length, 7);
+    disable_buttons();
     //Sets heights rather than swapping heights so animate function not used
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName('array-bar');
@@ -51,7 +51,8 @@ export default class SortingVisualiser extends React.Component {
       const barStyle = arrayBars[barOneIdx].style;
       barStyle.backgroundColor = '#FF522D';
       barStyle.height = `${newHeight}px`;
-      await new Promise(r => setTimeout(r, 10));
+      document.getElementById(barOneIdx).textContent = newHeight;
+      await new Promise(r => setTimeout(r, 60));
 
       arrayBars[barOneIdx].style.backgroundColor = '#3888ff';
     }
@@ -61,7 +62,7 @@ export default class SortingVisualiser extends React.Component {
   heapSort(){
     const animations = heapSortAnimation(this.state.array);
     disable_buttons();
-    animate(animations, 15);
+    animate(animations, 60);
   }
 
 
@@ -69,19 +70,20 @@ export default class SortingVisualiser extends React.Component {
     const {array} = this.state;
 
     return (
-      <div className="array-container">
-        {array.map((value, idx) => (
-        <div
-          className="array-bar"
-          key={idx}
-          style={{
-            height: `${value}px`,
-            backgroundColor: '#3888ff'
-          }}>
-          <span id={idx} class="hovertext">{value}</span>
+      <div className="main">
+        <div className="array-container">
+          {array.map((value, idx) => (
+          <div
+            className="array-bar"
+            key={idx}
+            style={{
+              height: `${value}px`,
+              backgroundColor: '#3888ff'
+            }}>
+            <span id={idx} class="hovertext">{value}</span>
+          </div>
+        ))}
         </div>
-
-      ))}
         <div className='button-container'>
           <button class="controls" onClick={() => this.resetArray()}>New Array</button>
           <button class="controls" onClick={() => this.quickSort()}>Quick Sort</button>
@@ -89,7 +91,6 @@ export default class SortingVisualiser extends React.Component {
           <button class="controls" onClick={() => this.heapSort()}>Heap Sort</button>
           <button class="controls" onClick={() => this.bubbleSort()}>Bubble Sort</button>
         </div>
-
       </div>
     );
   }
